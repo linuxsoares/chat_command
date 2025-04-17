@@ -1,6 +1,6 @@
 # chat_command
 
-**chat_command** is a CLI tool that generates and executes shell commands using OpenAI (GPT-4 Turbo) based on natural language instructions provided by the user—safely and interactively.
+**chat_command** is a CLI tool that generates and executes shell commands using OpenAI `(GPT-4 Turbo)` based on natural language instructions provided by the user—safely and interactively.
 
 ---
 
