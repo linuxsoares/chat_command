@@ -1,0 +1,32 @@
+name: Release aicommit
+
+on:
+  push:
+    tags:
+      - "v*" # qualquer versão tipo v1.0.0
+
+jobs:
+  build:
+    name: Build and Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.23"
+
+      - name: Build binary
+        run: |
+          mkdir -p dist
+          go build -o dist/chat_command .
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/chat_command
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
