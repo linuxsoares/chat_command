@@ -8,7 +8,8 @@ on:
 jobs:
   auto-release:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write # This is important for pushing tags and creating releases
     steps:
       - uses: actions/checkout@v4
 
@@ -28,16 +29,10 @@ jobs:
           TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
-      - name: Test authenticated access
-        run: |
-          git ls-remote https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}
-        env:
-          GH_TOKEN: ${{ secrets.PERSONAL_TOKEN_CHAT_COMMAND }}
-
       - name: Bump version and tag
         id: bump_tag
         env:
-          GH_TOKEN: ${{ secrets.PERSONAL_TOKEN_CHAT_COMMAND }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           OLD_TAG=${{ steps.get_tag.outputs.tag }}
           VERSION=${OLD_TAG#v}
@@ -64,4 +59,4 @@ jobs:
           tag_name: ${{ steps.bump_tag.outputs.new_tag }}
           files: dist/chat_command
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN_CHAT_COMMAND }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
